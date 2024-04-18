@@ -25,7 +25,7 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 Cypress.Commands.add('loginToApplication', () => {
   cy.visit('/login');
-  cy.get('input[type="email"]').type('yesekix413@iliken.com');
-  cy.get('input[type="password"]').type('yesekix413@iliken.com');
+  cy.get('[placeholder="Email"]').type('yesekix413@iliken.com');
+  cy.get('[placeholder="Password"]').type('yesekix413@iliken.com');
   cy.get('form').submit();
 });
