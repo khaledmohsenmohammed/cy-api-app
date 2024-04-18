@@ -17,7 +17,7 @@ describe('template spec', () => {
     cy.wait('@postArticles').then((xhr) => {
       console.log(xhr);
       expect(xhr.response.statusCode).to.equal(201);
-      exspect(xhr.response.body.article.title).to.equal(
+      expect(xhr.response.body.article.title).to.equal(
         'this is the new title (01)'
       );
       exspect(xhr.response.body.article.description).to.equal(
