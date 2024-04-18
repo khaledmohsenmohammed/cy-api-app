@@ -20,7 +20,7 @@ describe('template spec', () => {
       expect(xhr.response.body.article.title).to.equal(
         'this is the new title (01)'
       );
-      exspect(xhr.response.body.article.description).to.equal(
+      expect(xhr.response.body.article.description).to.equal(
         'this is the new description (01)'
       );
     });
