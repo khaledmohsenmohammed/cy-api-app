@@ -97,59 +97,47 @@ describe('template spec', () => {
   });
   //API
   it.only('deleat the new article in a globle feed', () => {
-    let user = {
-      user: {
-        email: 'yesekix413@iliken.com',
-        password: 'yesekix413@iliken.com',
-      },
-    };
     //this for login to the application
-    cy.request(
-      'POST',
-      'https://conduit-api.bondaracademy.com/api/users/login',
-      user
-    )
-      .its('body')
-      .then((body) => {
-        const token = body.user.token;
-        //the body of the request
-        const bodyRequest = {
-          article: {
-            title: ' cypress API data (01)',
-            description: 'this is the new description (01)',
-            body: 'this is the new body (01)',
-            tagList: ['cypress'],
-          },
-        };
-        //this to call the api to insert the new article
-        cy.request({
-          url: 'https://conduit-api.bondaracademy.com/api/articles',
-          headers: {
-            authorization: `Token ${token}`,
-          },
-          method: 'POST',
-          body: bodyRequest,
-        }).then((response) => {
-          expect(response.status).to.equal(201);
-        });
-        //this steps will be deleated the article after the test case
-        cy.contains('Global Feed').click();
-        cy.get(':nth-child(1) > .article-preview').click();
-        cy.contains('Delete Article').click();
-        //this to call the api to get the articles and verify the article is deleted
-        cy.request({
-          url: 'https://conduit-api.bondaracademy.com/api/articles?limit=10&offset=0',
-          headers: {
-            authorization: `Token ${token}`,
-          },
-          method: 'GET',
-        })
-          .its('body')
-          .then((body) => {
-            expect(body.articles[0].title).not.to.equal(
-              ' cypress API data (01)'
-            );
-          });
+    cy.get('@tokenSaved').then((body) => {
+      //prent the token to use it in the api request
+      const token = body;
+      console.log(token);
+      //the body of the request
+      const bodyRequest = {
+        article: {
+          title: ' cypress API data (01)',
+          description: 'this is the new description (01)',
+          body: 'this is the new body (01)',
+          tagList: ['cypress'],
+        },
+      };
+      //this to call the api to insert the new article
+      cy.request({
+        url: 'https://conduit-api.bondaracademy.com/api/articles',
+        headers: {
+          authorization: `Token ${token}`,
+        },
+        method: 'POST',
+        body: bodyRequest,
+      }).then((response) => {
+        expect(response.status).to.equal(201);
       });
+      //this steps will be deleated the article after the test case
+      cy.contains('Global Feed').click();
+      cy.get(':nth-child(1) > .article-preview').click();
+      cy.contains('Delete Article').click();
+      //this to call the api to get the articles and verify the article is deleted
+      cy.request({
+        url: 'https://conduit-api.bondaracademy.com/api/articles?limit=10&offset=0',
+        headers: {
+          authorization: `Token ${token}`,
+        },
+        method: 'GET',
+      })
+        .its('body')
+        .then((body) => {
+          expect(body.articles[0].title).not.to.equal(' cypress API data (01)');
+        });
+    });
   });
 });
